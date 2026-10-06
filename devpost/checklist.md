@@ -46,7 +46,7 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
 
 ## Final Review
 
-- [x] End-of-clip effects for the three lens clips (angry: squares press in, sparks, cracks with warm light; sad: blue and purple drops with rings, one gold drop rising; happy: gold bubbles and shapes that bounce and grow, one blue drop dancing). They come in 2.5 s before each lens clip ends and stay while the question shows; the normal clip stays quiet. Verified in the browser; learner tried it: "nice".
+- [x] End-of-clip effects for the three lens clips (angry: squares press in, sparks, cracks with warm light; sad: blue and purple drops with rings, one gold drop rising; happy: gold bubbles and shapes that bounce and grow, one blue drop dancing). They come in before each lens clip ends (2.5 s at first; the learner moved it to 4 s and then 6 s during the wrap-up) and stay while the question shows; the normal clip stays quiet. Verified in the browser; learner tried it: "nice".
 - [x] Reversed effects every second time through (start again): angry — squares pull back, cracks heal, warm light fills the screen; sad — many gold drops rise, one blue drop falls and rings; happy — blue drops bounce and grow, one gold bubble dances. A reload starts with the forward effects. Verified in the browser; learner tried it: "nice".
 - [x] Final review complete — feedback resolved and learner confirms ready to ship (2026-10-06: "ja")
 
@@ -67,3 +67,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Short visual transitions added to slice 2 (fades between screens and clips; reveal builds up clip by clip, answers next, closing question last; no sound effects) — the learner's early check found the ending needed to feel more exciting.
 - The sound reminder sits over the first clip for about three seconds and fades out, instead of on the opening screen — the opening screen must stay name, text and button only (`spec.md > Look and Feel`). If the browser blocks a clip from playing, its own play button is shown so the journey can continue.
 - Added `effects.js` and visual effects at the end of each lens clip, seen by the viewer before answering — the creator chose this during the final review as an extra layer of framing, each feeling with a small counterweight. Spec file structure updated.
+- Effects now start 6 s before each lens clip ends (was 2.5 s), and the blue drop in happy is bigger, glows, leaves a sparkle trail, swells and explodes into droplets with a shockwave, then forms again — the learner asked for this during the learning wrap-up after seeing the effects.

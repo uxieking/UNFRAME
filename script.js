@@ -37,7 +37,7 @@ const NORMAL_CLIP = "media/clip-normal.mp4";
 const SIMILAR_TAKES = false;
 
 // How many seconds before a lens clip ends its effect comes in (see effects.js).
-const EFFECT_SECONDS = 2.5;
+const EFFECT_SECONDS = 6;
 
 // ===================================================================
 // THE JOURNEY

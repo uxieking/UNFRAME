@@ -51,7 +51,106 @@ const Effects = (() => {
     ctx.restore();
   }
 
-  function ring(r, rings) {
+  // The one blue drop: bigger, glowing, with a sparkle trail, and it explodes.
+  function makeBlueDrop() {
+    const sparks = [];   // trail and explosion droplets
+    const waves = [];    // shockwave rings
+    let pulse = 0;
+
+    function explode(x, y) {
+      for (let i = 0; i < 26; i++) {
+        const angle = (i / 26) * Math.PI * 2 + rand(-0.1, 0.1);
+        const speed = rand(90, 220);
+        sparks.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: rand(2, 4.5), life: rand(0.6, 1.1), drop: true });
+      }
+      waves.push({ x, y, r: 6, life: 1 });
+    }
+
+    function draw(dt, x, y, size, flipped) {
+      pulse += dt;
+      const beat = 1 + 0.12 * Math.sin(pulse * 7);
+
+      // Trail of small blue sparkles
+      if (size > 0) {
+        sparks.push({ x: x + rand(-3, 3), y: y + rand(-3, 3), vx: rand(-15, 15), vy: rand(-15, 15), size: rand(1, 2.2), life: rand(0.3, 0.6), drop: false });
+      }
+
+      for (let i = waves.length - 1; i >= 0; i--) {
+        const w = waves[i];
+        w.life -= dt * 1.4;
+        if (w.life <= 0) { waves.splice(i, 1); continue; }
+        w.r += 160 * dt;
+        ctx.save();
+        ctx.globalAlpha *= w.life;
+        ctx.strokeStyle = "rgba(140, 185, 255, 1)";
+        ctx.shadowColor = BLUE_GLOW;
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 3 * w.life;
+        ctx.beginPath();
+        ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.life -= dt;
+        if (s.life <= 0) { sparks.splice(i, 1); continue; }
+        s.vx *= 0.97;
+        s.vy = s.vy * 0.97 + (s.drop ? 120 * dt : 0);
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
+        ctx.save();
+        ctx.globalAlpha *= Math.min(1, s.life * 1.6);
+        if (s.drop) {
+          drop(s.x, s.y, s.size, "rgba(110, 160, 255, 1)", BLUE_GLOW);
+        } else {
+          ctx.fillStyle = "rgba(190, 215, 255, 1)";
+          ctx.shadowColor = BLUE_GLOW;
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      if (size <= 0) return;
+      const r = size * beat;
+      // Outer glow
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
+      halo.addColorStop(0, "rgba(90, 140, 255, 0.55)");
+      halo.addColorStop(1, "rgba(90, 140, 255, 0)");
+      ctx.fillStyle = halo;
+      ctx.fillRect(x - r * 4, y - r * 4, r * 8, r * 8);
+      // The drop, with light inside it
+      ctx.save();
+      ctx.translate(x, y);
+      if (flipped) ctx.scale(1, -1);
+      const body = ctx.createRadialGradient(-r * 0.3, -r * 0.2, r * 0.1, 0, 0, r * 1.6);
+      body.addColorStop(0, "rgba(220, 235, 255, 1)");
+      body.addColorStop(0.35, "rgba(100, 155, 255, 1)");
+      body.addColorStop(1, "rgba(30, 60, 200, 1)");
+      ctx.fillStyle = body;
+      ctx.shadowColor = BLUE_GLOW;
+      ctx.shadowBlur = r * 2.5;
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 1.6);
+      ctx.bezierCurveTo(r, -r * 0.4, r, r, 0, r);
+      ctx.bezierCurveTo(-r, r, -r, -r * 0.4, 0, -r * 1.6);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.beginPath();
+      ctx.ellipse(-r * 0.35, -r * 0.2, r * 0.18, r * 0.3, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    return { draw, explode };
+  }
+
+  function ring(r) {
     ctx.save();
     ctx.globalAlpha *= r.life;
     ctx.strokeStyle = r.color;
@@ -267,6 +366,10 @@ const Effects = (() => {
       });
     }
     const phase = rand(0, 10);
+    const blueDrop = makeBlueDrop();
+    const BLUE_CYCLE = 2.6;   // seconds from forming to exploding
+    const BLUE_HIDDEN = 0.7;  // seconds gone after the explosion
+    let blueClock = 0.6;      // first explosion comes a little sooner
     let time = 0;
 
     function bubble(x, y, r) {
@@ -343,8 +446,19 @@ const Effects = (() => {
       const t = time + phase;
       const x = width / 2 + Math.sin(t * 1.3) * width * 0.32;
       const y = height / 2 + Math.sin(t * 2.1) * height * 0.3;
-      if (reversed) bubble(x, y, 12);
-      else drop(x, y, 6, BLUE, BLUE_GLOW);
+      if (reversed) {
+        bubble(x, y, 12);
+      } else {
+        // The blue drop swells as it dances, then explodes and forms again
+        blueClock += dt;
+        if (blueClock >= BLUE_CYCLE + BLUE_HIDDEN) blueClock = 0;
+        const wasVisible = blueClock - dt < BLUE_CYCLE;
+        if (blueClock >= BLUE_CYCLE && wasVisible) blueDrop.explode(x, y);
+        const growing = Math.min(1, blueClock / 0.4);
+        const swell = 1 + 0.6 * Math.pow(Math.min(1, blueClock / BLUE_CYCLE), 3);
+        const size = blueClock < BLUE_CYCLE ? 10 * growing * swell : 0;
+        blueDrop.draw(dt, x, y, size);
+      }
     };
   }
 
