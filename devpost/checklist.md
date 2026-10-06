@@ -52,15 +52,15 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: [what actually happened; real document/test/code references; unfinished work if interrupted]
-Route and stops: [actual paths and symbols; guided stops completed, or reference-only route]
-Edit outcome: [tried/kept/reverted/declined/not applicable; verification if changed]
+Activity and evidence: Guided route connected to the learner's goal of explaining ideas clearly: their spoken description of the end-of-clip effects (motion, colour, one counterweight per feeling) followed from `prd.md > Look and Feel` into `effects.js`. The learner then asked for further changes on the spot (effects 6 s before clip end; a bigger, glowing, exploding blue drop in happy), which were built, verified in the browser and committed.
+Route and stops: (1) `script.js` "timeupdate" listener and `EFFECT_SECONDS`; (2) `script.js` `round % 2`; (3) `effects.js` `function sad(reversed)` and "The one that goes the other way". All three stops shown with the file opened in the app's file pane.
+Edit outcome: Learner chose to change `EFFECT_SECONDS` from 2.5 to 4 (made by the agent at their request), then asked for 6; kept, verified (effect not running at 4.5 s left, running after), committed in 6d440cc.
 Reflection: [offered/answered/declined/already covered — personal answer belongs only in the ignored profile]
-Activity mode: [live app and editor, explicit static fallback, focused alternative, prior practice, or recap]
+Activity mode: Live app (localhost preview) and the app's file pane; animations verified by the agent with a timer stand-in because its browser pane was hidden.
 
 ## Revisions
 - Six answer choices instead of four (scared and surprised added) — the creator asked for them after slice 1 was built; scope, PRD and spec updated to match.

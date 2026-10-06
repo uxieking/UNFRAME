@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNFRAME App Map</title>
+<style>
+  :root {
+    --bg: #0b0910; --panel: #15121c; --purple: #8b5cf6; --white: #f5f3fa;
+    --grey: #a39eb0; --line: #3a3546; --gold: #ffd36b; --blue: #6b9bff;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f7f5fb; --panel: #ffffff; --purple: #6d3fe0; --white: #1b1724;
+      --grey: #5d5869; --line: #d9d4e3; --gold: #a87400; --blue: #2f5fd0;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--white);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-weight: 300; letter-spacing: 0.25em; margin: 0 0 4px; font-size: 2rem; }
+  h2 {
+    font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--grey); margin: 40px 0 12px; font-weight: 600;
+  }
+  .sub { color: var(--grey); margin: 0 0 24px; }
+  p { margin: 0 0 12px; }
+  code {
+    font-family: Consolas, "SF Mono", Menlo, monospace; font-size: 0.88em;
+    background: var(--panel); border: 1px solid var(--line); padding: 1px 5px;
+  }
+  pre {
+    background: var(--panel); border: 1px solid var(--line); padding: 12px;
+    overflow-x: auto; font-size: 0.85rem; margin: 8px 0 0;
+  }
+  pre code { background: none; border: 0; padding: 0; }
+  .pieces { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .piece { border: 1px solid var(--line); background: var(--panel); padding: 12px; }
+  .piece strong { display: block; font-family: Consolas, Menlo, monospace; color: var(--purple); }
+  .piece span { color: var(--grey); font-size: 0.9rem; }
+  .diagram { border: 1px solid var(--line); background: var(--panel); padding: 12px; }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram text { fill: var(--white); font-family: inherit; font-size: 13px; }
+  .diagram .muted { fill: var(--grey); font-size: 11px; }
+  .diagram rect { fill: var(--bg); stroke: var(--line); }
+  .diagram .accent { stroke: var(--purple); }
+  .diagram line, .diagram path { stroke: var(--purple); stroke-width: 1.5; fill: none; }
+  ol.route { padding-left: 20px; }
+  ol.route li { margin-bottom: 18px; }
+  .where { color: var(--grey); font-size: 0.9rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--grey); font-weight: 600; }
+  details { border: 1px solid var(--line); background: var(--panel); padding: 10px 12px; margin-top: 10px; }
+  summary { cursor: pointer; color: var(--purple); }
+  .practice { border-left: 2px solid var(--purple); padding-left: 16px; }
+  .foot { color: var(--grey); font-size: 0.85rem; margin-top: 40px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>UNFRAME</h1>
+<p class="sub">App map: where things live, and where to start when you want to change something.</p>
+
+<h2>What it is</h2>
+<p>A one-page interactive piece by LENSVRA. The viewer watches one moment through three emotional lenses (angry, sad, happy), says what mood they see after each clip, sees the quiet unfiltered clip, and then gets their answers handed back next to the real treatments. Near the end of each lens clip, a visual effect for that feeling comes in. When the viewer takes the test again, the effects are reversed.</p>
+
+<div class="pieces">
+  <div class="piece"><strong>index.html</strong><span>What is on the page: opening, clip and reveal screens</span></div>
+  <div class="piece"><strong>style.css</strong><span>How it looks: cinema dark, purple, white, grey, fades</span></div>
+  <div class="piece"><strong>script.js</strong><span>What happens: texts and settings at the top, then the journey</span></div>
+  <div class="piece"><strong>effects.js</strong><span>The visual effects at the end of each lens clip</span></div>
+  <div class="piece"><strong>media/</strong><span>The four clips, with lens and music built in</span></div>
+</div>
+<p class="where" style="margin-top:10px">Nothing is saved or sent anywhere. The answers live only in the page's memory.</p>
+
+<h2>One action, followed through the code</h2>
+<p>The route below follows what happens when a lens clip is near its end and its effect comes in.</p>
+
+<div class="diagram" role="img" aria-label="Diagram: the video player reports its time to script.js, which checks the time left against EFFECT_SECONDS, picks forward or reversed from the round, and asks effects.js to draw the effect over the clip.">
+<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" style="fill: var(--purple); stroke: none"/>
+    </marker>
+  </defs>
+  <rect x="10" y="40" width="150" height="70"/>
+  <text x="85" y="70" text-anchor="middle">The clip plays</text>
+  <text x="85" y="90" text-anchor="middle" class="muted">video reports its time</text>
+
+  <rect x="200" y="20" width="150" height="110" class="accent"/>
+  <text x="275" y="48" text-anchor="middle">script.js</text>
+  <text x="275" y="72" text-anchor="middle" class="muted">time left ≤ EFFECT_SECONDS?</text>
+  <text x="275" y="92" text-anchor="middle" class="muted">round % 2 → reversed?</text>
+  <text x="275" y="112" text-anchor="middle" class="muted">Effects.start(name, reversed)</text>
+
+  <rect x="390" y="20" width="150" height="110" class="accent"/>
+  <text x="465" y="48" text-anchor="middle">effects.js</text>
+  <text x="465" y="72" text-anchor="middle" class="muted">angry() / sad() / happy()</text>
+  <text x="465" y="92" text-anchor="middle" class="muted">draws on a canvas</text>
+  <text x="465" y="112" text-anchor="middle" class="muted">laid over the clip</text>
+
+  <rect x="580" y="40" width="130" height="70"/>
+  <text x="645" y="70" text-anchor="middle">You see it</text>
+  <text x="645" y="90" text-anchor="middle" class="muted">drops, cracks, bubbles</text>
+
+  <line x1="160" y1="75" x2="198" y2="75" marker-end="url(#arrow)"/>
+  <line x1="350" y1="75" x2="388" y2="75" marker-end="url(#arrow)"/>
+  <line x1="540" y1="75" x2="578" y2="75" marker-end="url(#arrow)"/>
+
+  <text x="360" y="170" text-anchor="middle" class="muted">When the viewer answers, script.js calls Effects.stop() and the next clip starts.</text>
+</svg>
+</div>
+
+<h2>The route: three stops</h2>
+<p class="where">Toured together during the build wrap-up. Search for the quoted text to find each stop; line numbers are from commit 6d440cc and can drift.</p>
+<ol class="route">
+  <li><strong>When should the effect start?</strong><br>
+    <span class="where"><code>script.js</code>, search for <code>"timeupdate"</code> (around line 151)</span>
+    <p>While a clip plays, the video tells the page how far it has come. The page works out how much is left and starts the effect once that is less than <code>EFFECT_SECONDS</code>. The normal clip is skipped, so it stays quiet.</p>
+    <pre><code>if (video.duration - video.currentTime &lt;= EFFECT_SECONDS) {</code></pre>
+  </li>
+  <li><strong>Forward or reversed?</strong><br>
+    <span class="where"><code>script.js</code>, search for <code>round % 2</code> (around line 154)</span>
+    <p><code>round</code> counts how many times the viewer pressed Start. Every second time, the remainder after dividing by 2 is 0, so the effect is reversed.</p>
+    <pre><code>const reversed = round % 2 === 0;</code></pre>
+  </li>
+  <li><strong>Where the effect is drawn</strong><br>
+    <span class="where"><code>effects.js</code>, search for <code>function sad(reversed)</code> (around line 291)</span>
+    <p>Builds 18 drops: blue and purple falling, or gold rising when reversed. Further down, the comment <code>// The one that goes the other way</code> marks the single counter-drop. <code>angry()</code> and <code>happy()</code> sit right next to it and follow the same pattern.</p>
+  </li>
+</ol>
+
+<h2>To change this, start here</h2>
+<table>
+  <tr><th>You want to…</th><th>Start here</th></tr>
+  <tr><td>Change any sentence the viewer reads, or the answer choices</td><td><code>script.js</code> → <code>const TEXTS</code> at the top</td></tr>
+  <tr><td>Make the effects come in earlier or later</td><td><code>script.js</code> → <code>const EFFECT_SECONDS</code> (now 6, changed from 2.5 during the wrap-up)</td></tr>
+  <tr><td>Change the clip order or a clip file</td><td><code>script.js</code> → <code>const LENS_CLIPS</code></td></tr>
+  <tr><td>Show the "similar takes" line on the reveal</td><td><code>script.js</code> → <code>const SIMILAR_TAKES</code> → <code>true</code></td></tr>
+  <tr><td>Change how an effect looks or moves</td><td><code>effects.js</code> → <code>function angry</code>, <code>function sad</code> or <code>function happy</code></td></tr>
+  <tr><td>Change the big exploding blue drop in happy</td><td><code>effects.js</code> → <code>function makeBlueDrop</code>, and <code>BLUE_CYCLE</code> inside <code>happy</code></td></tr>
+  <tr><td>Change colours, fonts or the fades</td><td><code>style.css</code> → <code>:root</code> at the top, and <code>@keyframes fade-in</code></td></tr>
+</table>
+
+<details>
+  <summary>How the rest of the journey works</summary>
+  <p><code>startJourney()</code> empties the answers and plays the first clip. <code>playClip()</code> fades between clips. When a lens clip ends, the question appears; <code>recordAnswer()</code> stores the answer or "skipped" and moves on. After the normal clip, Continue calls <code>showReveal()</code>, which builds the four small clips, the answer lines from <code>answerLine()</code>, and the closing question. <code>restart()</code> goes back to the opening screen.</p>
+</details>
+
+<h2>A practice to reuse</h2>
+<div class="practice">
+  <p><strong>Describe the feeling concretely, and the code can follow it closely.</strong> The end-of-clip effects were described as motion, colour and one counterweight per feeling (for example: blue and purple drops fall and make rings, one gold drop rises). That description went almost word for word into the plan (<code>devpost/prd.md</code>, Look and Feel), into the comments at the top of <code>effects.js</code>, and into one function per feeling. It was then checked in the browser and tried by the creator.</p>
+  <p>On another project, describing what someone should <em>see happen</em> (what moves, in which direction, what stands out) gives an agent something it can build and check, instead of a mood it has to guess.</p>
+</div>
+
+<h2>Run it again</h2>
+<p>Open the project folder and double-click <code>index.html</code>. Turn the sound on. Nothing to install.</p>
+
+<p class="foot">Snapshot of commit 6d440cc, made at the end of the build. The code can change after this; the search anchors above are more reliable than the line numbers.</p>
+
+</main>
+</body>
+</html>
