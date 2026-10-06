@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNFRAME Scope</title>
+<style>
+  :root {
+    --bg: #f6f3ee; --surface: #ffffff; --ink: #1c1a22; --muted: #6a6575;
+    --line: #ddd6cc; --accent: #5b3fd6; --accent-soft: #ece7fb;
+    --happy: #d98a00; --sad: #2f6fc4; --angry: #c8372d; --plain: #6a6575;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14121a; --surface: #1e1b27; --ink: #f0edf6; --muted: #a59fb3;
+      --line: #35303f; --accent: #a892ff; --accent-soft: #2a2440;
+      --happy: #f2b544; --sad: #6fa8ee; --angry: #f0736a; --plain: #a59fb3;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  .tag {
+    display: inline-block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 99px;
+  }
+  h1 { font-size: clamp(40px, 9vw, 72px); line-height: 1; margin: 18px 0 10px; letter-spacing: -.02em; }
+  h1 span { color: var(--muted); font-weight: 300; }
+  .lede { font-size: 20px; color: var(--muted); max-width: 34em; margin: 0 0 36px; }
+  h2 { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 44px 0 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .kernel { font-size: 21px; line-height: 1.45; border-left: 4px solid var(--accent); }
+  .kernel p { margin: 0 0 12px; } .kernel p:last-child { margin: 0; color: var(--muted); font-size: 17px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .card h3 { margin: 0 0 8px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); }
+  blockquote { margin: 12px 0 0; padding: 0; font-style: italic; }
+  .diagram { overflow-x: auto; padding: 14px; }
+  svg { display: block; width: 100%; min-width: 620px; height: auto; }
+  svg text { fill: var(--ink); font: 14px "Segoe UI", system-ui, sans-serif; }
+  svg .small { font-size: 12px; fill: var(--muted); }
+  svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .steps button {
+    font: inherit; font-size: 14px; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  }
+  .steps button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  #stepText { min-height: 5.5em; }
+  #stepText strong { display: block; font-size: 19px; margin-bottom: 4px; }
+  ol.done { margin: 0; padding-left: 22px; } ol.done li { margin-bottom: 6px; }
+  .note { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 16px 22px; font-weight: 600; display: flex; gap: 10px; align-items: center; }
+  summary .count { margin-left: auto; font-weight: 400; color: var(--muted); font-size: 14px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  details ul { margin: 0; padding: 0 22px 18px 44px; } details li { margin-bottom: 8px; }
+  details li span { color: var(--muted); }
+  .open { border-color: var(--accent); }
+  .open h3 { color: var(--accent); }
+  footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">Scope · approved · LENSVRA</span>
+  <h1><span>UN</span>FRAME</h1>
+  <p class="lede">A short interactive experience where viewers discover how digital framing shapes their first impression of a person.</p>
+
+  <h2>The unique kernel</h2>
+  <div class="card kernel">
+    <p>The viewer commits to an answer before they know the truth. Same person, same moment, three emotional lenses with matching music. Only at the end do they see which treatment each clip had and the original, unfiltered clip, next to their own answers.</p>
+    <p>A video could show the three lenses. Only an interactive piece can ask, remember what you said, and hand it back to you.</p>
+  </div>
+
+  <h2>How it fits together</h2>
+  <div class="card diagram">
+    <svg viewBox="0 0 760 300" role="img" aria-label="One recording of dancing by the ocean becomes three clips, happy, sad and angry. The viewer watches each and answers. The answers and the treatments meet at the reveal, which leads to the reflection question.">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>
+      <rect class="box" x="10" y="110" width="150" height="80" rx="12"/>
+      <text x="85" y="145" text-anchor="middle">One moment</text>
+      <text class="small" x="85" y="165" text-anchor="middle">dancing by the ocean</text>
+
+      <rect x="220" y="20" width="150" height="60" rx="12" fill="var(--surface)" stroke="var(--happy)" stroke-width="2"/>
+      <text x="295" y="46" text-anchor="middle">Happy</text><text class="small" x="295" y="64" text-anchor="middle">lens + music</text>
+      <rect x="220" y="120" width="150" height="60" rx="12" fill="var(--surface)" stroke="var(--sad)" stroke-width="2"/>
+      <text x="295" y="146" text-anchor="middle">Sad</text><text class="small" x="295" y="164" text-anchor="middle">lens + music</text>
+      <rect x="220" y="220" width="150" height="60" rx="12" fill="var(--surface)" stroke="var(--angry)" stroke-width="2"/>
+      <text x="295" y="246" text-anchor="middle">Angry</text><text class="small" x="295" y="264" text-anchor="middle">lens + music</text>
+
+      <path class="arrow" d="M160 135 L218 55" marker-end="url(#a)"/>
+      <path class="arrow" d="M160 150 L218 150" marker-end="url(#a)"/>
+      <path class="arrow" d="M160 165 L218 245" marker-end="url(#a)"/>
+
+      <rect class="box" x="430" y="110" width="140" height="80" rx="12"/>
+      <text x="500" y="140" text-anchor="middle">Viewer answers</text>
+      <text class="small" x="500" y="158" text-anchor="middle">"What mood</text>
+      <text class="small" x="500" y="174" text-anchor="middle">do you see?" ×3</text>
+      <path class="arrow" d="M370 50 L428 130" marker-end="url(#a)"/>
+      <path class="arrow" d="M370 150 L428 150" marker-end="url(#a)"/>
+      <path class="arrow" d="M370 250 L428 170" marker-end="url(#a)"/>
+
+      <rect x="630" y="100" width="120" height="100" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="690" y="130" text-anchor="middle">The reveal</text>
+      <text class="small" x="690" y="152" text-anchor="middle">unfiltered original</text>
+      <text class="small" x="690" y="168" text-anchor="middle">+ treatments</text>
+      <text class="small" x="690" y="184" text-anchor="middle">+ your answers</text>
+      <path class="arrow" d="M570 150 L628 150" marker-end="url(#a)"/>
+      <text class="small" x="500" y="100" text-anchor="middle">labels hidden until the end</text>
+    </svg>
+  </div>
+
+  <h2>The journey, step by step</h2>
+  <div class="card">
+    <div class="steps" id="steps"></div>
+    <div id="stepText"></div>
+    <noscript>
+      <ol class="done">
+        <li>Start from a short introduction inviting them to watch and share their impression.</li>
+        <li>Watch a short clip with no label saying which treatment it has.</li>
+        <li>Answer: "How would you describe this person's mood?" Happy, sad, angry, scared, surprised, or unsure.</li>
+        <li>Repeat for the second and third clip.</li>
+        <li>Reach the reveal: the unfiltered original, treatments, own answers, replay and compare.</li>
+        <li>End on the reflection question.</li>
+      </ol>
+    </noscript>
+  </div>
+
+  <h2>Who and why</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Who it's for</h3>
+      <p>LENSVRA's own audience: people who already use and enjoy Snapchat lenses and rarely stop to ask what a lens does to how they read a face.</p>
+    </div>
+    <div class="card">
+      <h3>Why it matters to you</h3>
+      <p>Bringing together your lenses, your new song, creativity and technology.</p>
+      <blockquote>"An opportunity to turn my creative skills into a working app with the help of an AI agent."</blockquote>
+    </div>
+    <div class="card">
+      <h3>Identity</h3>
+      <p>Your lenses, your choreography, your song about being ONLY HUMAN. Reflective in tone: no right or wrong answers.</p>
+    </div>
+  </div>
+
+  <h2>What "working" looks like</h2>
+  <div class="card">
+    <ol class="done">
+      <li>Start the experience.</li>
+      <li>Watch three short clips from one setting, each with a different emotional lens and matching music.</li>
+      <li>Record an impression after each clip, without seeing the treatment labels beforehand.</li>
+      <li>Reach a reveal screen showing the original, unfiltered clip, the treatments and the answers, with the option to replay and compare.</li>
+      <li>Reflect on: "Are you reacting to what happened, or to how it was presented?"</li>
+    </ol>
+    <p class="note">Answers must carry through correctly to the reveal, and video, audio and navigation must work throughout. Success means the experience works and invites reflection, even if someone's answers do not change.</p>
+  </div>
+
+  <h2>The boundary</h2>
+  <details open>
+    <summary><span class="dot" style="background:var(--accent)"></span>Now: in the prototype<span class="count">7</span><!-- unfiltered original included --></summary>
+    <ul>
+      <li>One setting: dancing by the ocean.</li>
+      <li>Four short clips: happy, sad, angry, and the unfiltered original (shown only at the reveal). <span>Lens and music are prepared by you and are part of each video file; the app plays them.</span></li>
+      <li>One question after each clip, six answers: happy, sad, angry, scared, surprised, unsure.</li>
+      <li>One reveal screen with the unfiltered original, treatments, answers and replay.</li>
+      <li>One closing reflection question.</li>
+      <li>If the clips are separate takes, the reveal says clearly they are similar takes, not identical footage.</li>
+      <li>Runs on your computer for the demo video; code in a public GitHub repository.</li>
+    </ul>
+  </details>
+  <details>
+    <summary><span class="dot" style="background:var(--happy)"></span>Later: worth doing, not now<span class="count">5</span></summary>
+    <ul>
+      <li>More settings and rounds (the store, the workout).</li>
+      <li>Putting it online so your whole audience can open it from a link.</li>
+      <li>Showing how other viewers answered.</li>
+      <li>The longer 1–3 minute piece edited in CapCut.</li>
+      <li>"From room to scene". <span>The viewer chooses something around them (a feeling, a moment, a creative limit) and gets a small creative challenge they can actually do. A separate idea, parked for a next project.</span></li>
+    </ul>
+  </details>
+  <details>
+    <summary><span class="dot" style="background:var(--angry)"></span>Cut: named, with a reason<span class="count">3</span></summary>
+    <ul>
+      <li>Accounts and saved results. <span>Answers only need to live until the reveal.</span></li>
+      <li>Live camera or applying lenses inside the app. <span>The lenses live in Snapchat; the app plays finished clips.</span></li>
+      <li>Scoring answers as right or wrong. <span>The point is reflection, not a test.</span></li>
+    </ul>
+  </details>
+
+  <h2>Still open</h2>
+  <div class="grid">
+    <div class="card open">
+      <h3>One recording or three takes</h3>
+      <p>For you to test: can the same ocean recording go through all three lenses? The honest fallback is already agreed.</p>
+    </div>
+  </div>
+
+  <footer>Companion to <code>devpost/scope.md</code>, which stays the official version.</footer>
+</main>
+<script>
+  var steps = [
+    ["Start", "A short introduction invites the viewer to watch and share their impression."],
+    ["Watch", "A short clip plays. Nothing says which emotional treatment it has."],
+    ["Answer", "\"How would you describe this person's mood?\" Happy, sad, angry, scared, surprised, or unsure."],
+    ["Repeat", "The second and third clip follow the same way: watch, then answer."],
+    ["Reveal", "The original, unfiltered clip and which treatment each clip had, next to the viewer's own answers, with replay and compare."],
+    ["Reflect", "\"Are you reacting to what happened, or to how it was presented?\""]
+  ];
+  var bar = document.getElementById("steps"), out = document.getElementById("stepText");
+  function show(i) {
+    out.innerHTML = "";
+    var s = document.createElement("strong"); s.textContent = (i + 1) + ". " + steps[i][0];
+    var p = document.createElement("span"); p.textContent = steps[i][1];
+    out.appendChild(s); out.appendChild(p);
+    Array.prototype.forEach.call(bar.children, function (b, j) { b.setAttribute("aria-pressed", j === i); });
+  }
+  steps.forEach(function (st, i) {
+    var b = document.createElement("button"); b.type = "button"; b.textContent = (i + 1) + " " + st[0];
+    b.onclick = function () { show(i); }; bar.appendChild(b);
+  });
+  show(0);
+</script>
+</body>
+</html>

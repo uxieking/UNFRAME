@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNFRAME Technical Plan</title>
+<style>
+  :root {
+    --bg: #f6f3ee; --surface: #ffffff; --ink: #1c1a22; --muted: #6a6575;
+    --line: #ddd6cc; --accent: #5b3fd6; --accent-soft: #ece7fb;
+    --html: #c8372d; --css: #2f6fc4; --js: #b07a00; --media: #2e8b62;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14121a; --surface: #1e1b27; --ink: #f0edf6; --muted: #a59fb3;
+      --line: #35303f; --accent: #a892ff; --accent-soft: #2a2440;
+      --html: #f0736a; --css: #6fa8ee; --js: #f2b544; --media: #5fcf9c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  .tag { display: inline-block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 99px; }
+  h1 { font-size: clamp(36px, 8vw, 60px); line-height: 1.05; margin: 18px 0 10px; letter-spacing: -.02em; }
+  h1 span { color: var(--muted); font-weight: 300; }
+  .lede { font-size: 20px; color: var(--muted); max-width: 34em; margin: 0 0 30px; }
+  h2 { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 44px 0 14px; }
+  h3 { margin: 0 0 8px; font-size: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card p { margin: 0 0 10px; } .card p:last-child { margin-bottom: 0; }
+  .muted { color: var(--muted); }
+  code { font: 14px Consolas, "Cascadia Mono", monospace; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .file { border-top: 4px solid var(--line); }
+  .file.h { border-top-color: var(--html); } .file.c { border-top-color: var(--css); }
+  .file.j { border-top-color: var(--js); } .file.m { border-top-color: var(--media); }
+  .diagram { overflow-x: auto; padding: 14px; }
+  svg { display: block; width: 100%; min-width: 640px; height: auto; }
+  svg text { fill: var(--ink); font: 13px "Segoe UI", system-ui, sans-serif; }
+  svg .small { font-size: 11px; fill: var(--muted); }
+  svg .box { fill: var(--surface); stroke-width: 2; }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .steps button { font: inherit; font-size: 14px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .steps button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  #stepOut { min-height: 9em; }
+  #stepOut .see { font-size: 19px; margin: 0 0 8px; }
+  #stepOut .lbl { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .chip { font-size: 13px; padding: 2px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on.h { border-color: var(--html); color: var(--html); } .chip.on.c { border-color: var(--css); color: var(--css); }
+  .chip.on.j { border-color: var(--js); color: var(--js); } .chip.on.m { border-color: var(--media); color: var(--media); }
+  table { width: 100%; border-collapse: collapse; } th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  pre { margin: 0; overflow-x: auto; font: 14px/1.7 Consolas, "Cascadia Mono", monospace; }
+  pre span { color: var(--muted); }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 16px 22px; font-weight: 600; }
+  details ul { margin: 0; padding: 0 22px 18px 42px; } details li { margin-bottom: 8px; }
+  details li span { color: var(--muted); }
+  blockquote { margin: 8px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">Technical plan · approved · LENSVRA</span>
+  <h1><span>UN</span>FRAME<span> — how it's built</span></h1>
+  <p class="lede">One web page, three small files, and a folder with your four clips. Nothing to install, nothing to log in to.</p>
+
+  <h2>The pieces</h2>
+  <div class="grid">
+    <div class="card file h"><h3><code>index.html</code></h3><p><strong>What is on the page.</strong></p><p class="muted">The name, the texts, the buttons, and the place where a video plays. All five screens live here; only one shows at a time.</p></div>
+    <div class="card file c"><h3><code>style.css</code></h3><p><strong>How it looks.</strong></p><p class="muted">The dark cinema background, the purple, white and grey, the sharp modern text.</p></div>
+    <div class="card file j"><h3><code>script.js</code></h3><p><strong>What happens.</strong></p><p class="muted">Plays the next clip, remembers each answer in a short list, and builds the reveal.</p></div>
+    <div class="card file m"><h3><code>media/</code></h3><p><strong>Your four clips.</strong></p><p class="muted">Angry, sad, happy, normal. The lens and music are already inside each file. The page only plays them.</p></div>
+  </div>
+
+  <h2>How they work together</h2>
+  <div class="card diagram">
+    <svg viewBox="0 0 760 250" role="img" aria-label="The browser reads index.html, which uses style.css for the look and script.js for the behaviour. script.js tells the video area which clip from the media folder to play, and keeps a list of answers in memory. The reveal reads that list.">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>
+      <rect class="box" x="10" y="95" width="120" height="60" rx="10" stroke="var(--line)"/><text x="70" y="121" text-anchor="middle">The viewer's</text><text x="70" y="139" text-anchor="middle">browser</text>
+      <rect class="box" x="190" y="95" width="130" height="60" rx="10" stroke="var(--html)"/><text x="255" y="121" text-anchor="middle">index.html</text><text class="small" x="255" y="139" text-anchor="middle">the screens</text>
+      <rect class="box" x="190" y="10" width="130" height="50" rx="10" stroke="var(--css)"/><text x="255" y="32" text-anchor="middle">style.css</text><text class="small" x="255" y="48" text-anchor="middle">the look</text>
+      <rect class="box" x="390" y="95" width="130" height="60" rx="10" stroke="var(--js)"/><text x="455" y="121" text-anchor="middle">script.js</text><text class="small" x="455" y="139" text-anchor="middle">what happens</text>
+      <rect class="box" x="600" y="20" width="150" height="60" rx="10" stroke="var(--media)"/><text x="675" y="46" text-anchor="middle">media/ folder</text><text class="small" x="675" y="64" text-anchor="middle">four video files</text>
+      <rect x="600" y="170" width="150" height="66" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><text x="675" y="196" text-anchor="middle">The list of answers</text><text class="small" x="675" y="214" text-anchor="middle">in memory only,</text><text class="small" x="675" y="228" text-anchor="middle">gone on reload</text>
+      <path class="arrow" d="M130 125 H188" marker-end="url(#a)"/>
+      <path class="arrow" d="M255 95 V62" marker-end="url(#a)"/>
+      <path class="arrow" d="M320 125 H388" marker-end="url(#a)"/>
+      <path class="arrow" d="M520 110 L598 60" marker-end="url(#a)"/><text class="small" x="540" y="72">plays</text>
+      <path class="arrow" d="M520 140 L598 190" marker-end="url(#a)"/><text class="small" x="512" y="186">writes, then reads</text>
+    </svg>
+  </div>
+
+  <h2>The journey through the pieces</h2>
+  <div class="card">
+    <div class="steps" id="steps"></div>
+    <div id="stepOut"></div>
+    <noscript><p>The viewer opens the page, presses start, watches the angry, sad and happy clips, answers or skips after each, watches the normal clip, and reaches the reveal, which reads the list of answers.</p></noscript>
+  </div>
+
+  <h2>What the page remembers</h2>
+  <div class="card">
+    <p>One short list, one line per lens clip. For example:</p>
+    <table>
+      <tr><th>Clip</th><th>Chosen</th><th>Reveal shows</th></tr>
+      <tr><td>angry</td><td>sad</td><td>"You said: sad"</td></tr>
+      <tr><td>sad</td><td>unsure</td><td>"You said: unsure"</td></tr>
+      <tr><td>happy</td><td>skipped</td><td>"You skipped this one"</td></tr>
+    </table>
+    <p class="muted" style="margin-top:12px">It lives only while the page is open. Reloading or pressing "start again" empties it. Nothing is saved and nothing is sent anywhere.</p>
+  </div>
+
+  <h2>The files</h2>
+  <div class="card">
+<pre>LENSVRA BUILD WITH AI/
+├── index.html          <span># what is on the page: all five screens</span>
+├── style.css           <span># how it looks</span>
+├── script.js           <span># what happens; texts and settings at the top</span>
+├── media/
+│   ├── clip-angry.mp4  <span># Cartoon Rage Face, with music</span>
+│   ├── clip-sad.mp4    <span># Tearful Gaze, with music</span>
+│   ├── clip-happy.mp4  <span># Mega Joy Face, with the happier mix</span>
+│   └── clip-normal.mp4 <span># no lens</span>
+├── README.md           <span># what UNFRAME is and how to open it</span>
+├── TODO.md             <span># progress checklist</span>
+└── devpost/            <span># planning documents</span></pre>
+    <p class="muted" style="margin-top:14px">Name your clips exactly like this and they replace the stand-ins with no change to the code.</p>
+  </div>
+
+  <h2>Running it and showing it</h2>
+  <div class="grid">
+    <div class="card"><h3>To start it</h3><p class="muted">Open the project folder and double-click <code>index.html</code>. No server, no keys, no accounts.</p></div>
+    <div class="card"><h3>For the demo video</h3><p class="muted">Open it in Chrome, make the window tall and narrow like a phone, and record the screen with sound. Upload to YouTube with comments off.</p></div>
+    <div class="card"><h3>Online later, optional</h3><p class="muted">GitHub Pages can publish this same folder as a link. Not part of this build.</p></div>
+  </div>
+
+  <h2>Your question: making the opening eye-catching</h2>
+  <div class="card">
+    <blockquote>"I'm not sure where to place it at the site to get the design correct for eye-catching immediately and make the users want to test it."</blockquote>
+    <p>UNFRAME is its own page, so the opening screen is the whole first impression. The approach: <strong>one name, one short text, one button</strong>, all visible without scrolling. The start button is the only purple thing on the screen, so the eye goes to it.</p>
+    <p class="muted">How we check it during the build: you look at it on your own phone, then hand it to one other person without explaining anything. If they press start within a few seconds, it works. If not, we adjust.</p>
+  </div>
+
+  <h2>Where it could break</h2>
+  <div class="grid">
+    <div class="card"><h3>A clip won't play</h3><p class="muted">The clip area says "This clip could not be played." and the question still appears.</p></div>
+    <div class="card"><h3>No sound</h3><p class="muted">A small "sound on" reminder before the first clip. Sound is tested on your own phone during the build.</p></div>
+    <div class="card"><h3>Slow clips</h3><p class="muted">Keep each clip short and under about 10 MB. GitHub refuses single files over 100 MB.</p></div>
+  </div>
+
+  <h2>Decisions</h2>
+  <details open>
+    <summary>Yours</summary>
+    <ul>
+      <li>A simple web page, not an installed app.</li>
+      <li>Vertical clips; most of your audience opens it on a phone.</li>
+      <li>The four clips, including the song, may be public on GitHub. <span>"I'm a public person."</span></li>
+      <li>The demo video goes on YouTube with comments off.</li>
+      <li>Filming on 2 or 3 October 2026.</li>
+      <li>One question per clip, about the person on screen. <span>The question about the viewer's own feelings was removed as "the most personal one."</span></li>
+      <li>No privacy note on the page. <span>Nothing is saved or sent, and a note could make viewers doubt it.</span></li>
+      <li>The normal clip has no music, no text, and no name on the reveal. <span>"Because the user have to think."</span></li>
+      <li>Your four real clips are in the media folder as <code>.mp4</code>. <span>Stand-in clips are no longer needed.</span></li>
+    </ul>
+  </details>
+  <details open>
+    <summary>My recommendations, which you accepted</summary>
+    <ul>
+      <li>No framework and no added libraries. <span>Every line in the project belongs to UNFRAME, and nothing needs installing.</span></li>
+      <li>Stand-in clips if we build before the real ones exist. <span>Plainly labelled, replaced before the demo video.</span></li>
+      <li>All the words in one block at the top of <code>script.js</code>. <span>You can change wording yourself without touching anything else.</span></li>
+      <li>One sentence in the README saying UNFRAME does not save or send any answers. <span>For the curious, without disturbing the experience.</span></li>
+    </ul>
+  </details>
+  <details>
+    <summary>Simplified on purpose</summary>
+    <ul>
+      <li>Opened from your computer instead of a website with a link.</li>
+      <li>Answers kept in memory instead of being saved.</li>
+      <li>Finished video files instead of lenses running in the page.</li>
+    </ul>
+  </details>
+  <details>
+    <summary>Still open, none blocking the build</summary>
+    <ul>
+      <li>One recording or three takes. <span>A yes/no setting adds the "similar takes" line to the reveal.</span></li>
+      <li>Final wording of the opening text.</li>
+    </ul>
+  </details>
+
+  <footer>Companion to <code>devpost/spec.md</code>, which stays the official version.</footer>
+</main>
+<script>
+  var steps = [
+    ["The opening screen appears.", "The browser reads the three files and shows the first screen.", "hc"],
+    ["They press start; the angry clip plays with sound.", "The script hides the opening, shows the clip screen and plays clip-angry.mp4. A button press is what lets the browser play sound.", "jm"],
+    ["The clip ends; the question, skip and replay appear.", "The video tells the script it has finished, and the script shows the question panel.", "hj"],
+    ["They answer or skip; the next clip plays.", "The script adds one line to its list, then plays clip-sad.mp4. The same happens again for clip-happy.mp4.", "jm"],
+    ["The normal clip plays, with no music and no text.", "After the third line is in the list, the script plays clip-normal.mp4 and shows a continue button. No question.", "jm"],
+    ["The reveal: four clips and their own answers.", "The script reads its list and writes one line under each lens clip. The three lens clips get their names; the normal clip gets none. Tapping a clip plays it and stops any other.", "hjm"],
+    ["Start again.", "The script empties the list and shows the opening screen.", "j"]
+  ];
+  var names = { h: "index.html", c: "style.css", j: "script.js", m: "media/" };
+  var bar = document.getElementById("steps"), out = document.getElementById("stepOut");
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function show(i) {
+    out.innerHTML = "";
+    out.appendChild(el("div", "lbl", "The viewer sees"));
+    out.appendChild(el("p", "see", steps[i][0]));
+    out.appendChild(el("div", "lbl", "Behind the scenes"));
+    out.appendChild(el("p", "muted", steps[i][1]));
+    var chips = el("div", "chips");
+    Object.keys(names).forEach(function (k) {
+      chips.appendChild(el("span", "chip " + k + (steps[i][2].indexOf(k) > -1 ? " on" : ""), names[k]));
+    });
+    out.appendChild(chips);
+    Array.prototype.forEach.call(bar.children, function (b, j) { b.setAttribute("aria-pressed", j === i); });
+  }
+  steps.forEach(function (s, i) {
+    var b = el("button", "", String(i + 1)); b.type = "button"; b.setAttribute("aria-label", "Step " + (i + 1));
+    b.onclick = function () { show(i); }; bar.appendChild(b);
+  });
+  show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNFRAME — LENSVRA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="stage">
+
+    <!-- 1. Opening screen -->
+    <section id="screen-opening" class="screen screen-opening">
+      <p class="brand">LENSVRA</p>
+      <h1 class="title">UNFRAME</h1>
+      <p id="opening-text" class="lead"></p>
+      <button id="start-button" class="button button-primary" type="button"></button>
+    </section>
+
+    <!-- 2. Clip screen: one player, reused for every lens clip -->
+    <section id="screen-clip" class="screen screen-clip" hidden>
+      <div class="player">
+        <video id="clip-video" playsinline preload="auto"></video>
+      </div>
+
+      <div id="question-panel" class="question" hidden>
+        <p id="question-text" class="question-text"></p>
+        <div id="choices" class="choices"></div>
+        <div class="question-actions">
+          <button id="replay-button" class="button button-ghost" type="button"></button>
+          <button id="skip-button" class="button button-ghost" type="button"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Reveal screen (first version: the answer list) -->
+    <section id="screen-reveal" class="screen screen-reveal" hidden>
+      <ul id="answer-list" class="answer-list"></ul>
+    </section>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

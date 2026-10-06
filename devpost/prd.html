@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNFRAME Product Plan</title>
+<style>
+  :root {
+    --bg: #f6f3ee; --surface: #ffffff; --ink: #1c1a22; --muted: #6a6575;
+    --line: #ddd6cc; --accent: #5b3fd6; --accent-soft: #ece7fb;
+    --happy: #d98a00; --sad: #2f6fc4; --angry: #c8372d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14121a; --surface: #1e1b27; --ink: #f0edf6; --muted: #a59fb3;
+      --line: #35303f; --accent: #a892ff; --accent-soft: #2a2440;
+      --happy: #f2b544; --sad: #6fa8ee; --angry: #f0736a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+  .tag { display: inline-block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 99px; }
+  h1 { font-size: clamp(36px, 8vw, 60px); line-height: 1.05; margin: 18px 0 10px; letter-spacing: -.02em; }
+  h1 span { color: var(--muted); font-weight: 300; }
+  .lede { font-size: 20px; color: var(--muted); max-width: 34em; margin: 0 0 30px; }
+  h2 { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 44px 0 14px; }
+  h3 { margin: 0 0 8px; font-size: 20px; }
+  h4 { margin: 18px 0 6px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card p { margin: 0 0 10px; } .card p:last-child { margin-bottom: 0; }
+  .muted { color: var(--muted); }
+  .diagram { overflow-x: auto; padding: 14px; }
+  svg { display: block; width: 100%; min-width: 680px; height: auto; }
+  svg text { fill: var(--ink); font: 13px "Segoe UI", system-ui, sans-serif; }
+  svg .small { font-size: 11px; fill: var(--muted); }
+  svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .steps button { font: inherit; font-size: 14px; padding: 7px 14px; border-radius: 99px; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .steps button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .screen { display: none; } .screen.on { display: block; }
+  .nojs .screen { display: block; margin-bottom: 28px; }
+  blockquote { margin: 8px 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  ul.check { list-style: none; margin: 0; padding: 0; }
+  ul.check li { padding-left: 26px; position: relative; margin-bottom: 6px; }
+  ul.check li::before { content: ""; position: absolute; left: 0; top: .38em; width: 13px; height: 13px; border: 1.5px solid var(--muted); border-radius: 3px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .swatches { display: flex; gap: 8px; margin: 10px 0; }
+  .swatches i { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--line); }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; }
+  summary { cursor: pointer; padding: 16px 22px; font-weight: 600; }
+  details ul { margin: 0; padding: 0 22px 18px 42px; } details li { margin-bottom: 8px; }
+  details li span, .q { color: var(--muted); }
+  .assume { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 99px; padding: 1px 8px; margin-left: 6px; white-space: nowrap; }
+  footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">Product plan · approved · LENSVRA</span>
+  <h1><span>UN</span>FRAME<span> — what it does</span></h1>
+  <p class="lede">One moment, three emotional treatments, one question asked three times, and then what was really recorded.</p>
+
+  <h2>The journey</h2>
+  <div class="card diagram">
+    <svg viewBox="0 0 820 170" role="img" aria-label="Journey: opening screen, then the angry clip and a question, the sad clip and a question, the happy clip and a question, then the normal clip, then the reveal. The viewer only moves forward. Start again returns to the opening.">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>
+      <rect class="box" x="6" y="40" width="100" height="64" rx="10"/><text x="56" y="68" text-anchor="middle">Opening</text><text class="small" x="56" y="86" text-anchor="middle">text + start</text>
+      <rect x="140" y="40" width="100" height="64" rx="10" fill="var(--surface)" stroke="var(--angry)" stroke-width="2"/><text x="190" y="68" text-anchor="middle">Clip 1</text><text class="small" x="190" y="86" text-anchor="middle">then question</text>
+      <rect x="274" y="40" width="100" height="64" rx="10" fill="var(--surface)" stroke="var(--sad)" stroke-width="2"/><text x="324" y="68" text-anchor="middle">Clip 2</text><text class="small" x="324" y="86" text-anchor="middle">then question</text>
+      <rect x="408" y="40" width="100" height="64" rx="10" fill="var(--surface)" stroke="var(--happy)" stroke-width="2"/><text x="458" y="68" text-anchor="middle">Clip 3</text><text class="small" x="458" y="86" text-anchor="middle">then question</text>
+      <rect class="box" x="542" y="40" width="100" height="64" rx="10"/><text x="592" y="68" text-anchor="middle">Normal clip</text><text class="small" x="592" y="86" text-anchor="middle">no question</text>
+      <rect x="676" y="40" width="138" height="64" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><text x="745" y="68" text-anchor="middle">Reveal</text><text class="small" x="745" y="86" text-anchor="middle">names + your answers</text>
+      <path class="arrow" d="M106 72 H138" marker-end="url(#a)"/><path class="arrow" d="M240 72 H272" marker-end="url(#a)"/><path class="arrow" d="M374 72 H406" marker-end="url(#a)"/><path class="arrow" d="M508 72 H540" marker-end="url(#a)"/><path class="arrow" d="M642 72 H674" marker-end="url(#a)"/>
+      <text class="small" x="324" y="26" text-anchor="middle">the viewer does not know these are angry, sad, happy</text>
+      <path class="arrow" d="M745 104 V140 H56 V106" marker-end="url(#a)" stroke-dasharray="5 4"/>
+      <text class="small" x="400" y="158" text-anchor="middle">start again: answers cleared</text>
+    </svg>
+  </div>
+
+  <h2>Screen by screen</h2>
+  <div class="card nojs" id="screens">
+    <div class="steps" id="tabs"></div>
+
+    <section class="screen" data-name="Opening">
+      <h3>Opening screen</h3>
+      <p>The name UNFRAME, a short text on screen, and a start button. The text gives a small hint that the viewer will be asked for their impression, without saying the clips are one moment with different lenses.</p>
+      <h4>Draft wording, yours to change</h4>
+      <blockquote>"You are about to watch a few short clips. After each one, tell us what you see. There are no wrong answers."</blockquote>
+      <h4>How we know it works</h4>
+      <ul class="check">
+        <li>The name, the text, and a start button are visible without scrolling on a phone.</li>
+        <li>Nothing mentions lenses, filters, or the names of the moods.</li>
+        <li>Pressing start leads to the angry clip.</li>
+      </ul>
+    </section>
+
+    <section class="screen" data-name="Watching">
+      <h3>Watching a clip</h3>
+      <p>The three lens clips play in a fixed order: angry, sad, happy. Each plays with its own sound. No label, title, or color tells the viewer which treatment they are watching.</p>
+      <h4>How we know it works</h4>
+      <ul class="check">
+        <li>The clips always appear in the order angry, sad, happy.</li>
+        <li>Video and sound both play for each clip.</li>
+        <li>While a clip plays, and while its question is on screen, nothing names the treatment.</li>
+      </ul>
+    </section>
+
+    <section class="screen" data-name="Answering">
+      <h3>Answering the question</h3>
+      <p>When a clip ends, the viewer is asked one question, about the person on screen. If they do not want to answer, they can skip. They may replay the clip as often as they like first.</p>
+      <blockquote>"How would you describe this person's mood?"<br>Happy · Sad · Angry · Scared · Surprised · Unsure</blockquote>
+      <h4>How we know it works</h4>
+      <ul class="check">
+        <li>The question and a skip button appear after each of the three lens clips, the same way each time.</li>
+        <li>Replay plays the same clip again, and the question is still there afterwards.</li>
+        <li>The viewer continues only by answering the question or by pressing skip.</li>
+        <li>After answering or skipping, there is no way to go back and change it.</li>
+      </ul>
+    </section>
+
+    <section class="screen" data-name="Normal clip">
+      <h3>The normal clip</h3>
+      <p>After the third answer, the unfiltered clip plays on its own. No lens, no music, and no text explaining it. No question is asked. The quiet is on purpose: the viewer is left to think.</p>
+      <h4>How we know it works</h4>
+      <ul class="check">
+        <li>It appears only after all three answers have been given.</li>
+        <li>No answer buttons appear with it.</li>
+        <li>A button leads on to the reveal.</li>
+      </ul>
+    </section>
+
+    <section class="screen" data-name="Reveal">
+      <h3>The reveal</h3>
+      <p>All four clips together. The three lens clips are now named: angry, sad, happy. The unfiltered clip has no name and no text. Under each lens clip is the viewer's own answer. No ticks, crosses, or scores. Tapping a clip plays it again. The closing question stands on its own at the bottom, with a start again button.</p>
+      <blockquote>"Lens: angry. You said: sad."<br>or: "You skipped this one."</blockquote>
+      <blockquote>"Are you reacting to what happened, or to how it was presented?"</blockquote>
+      <h4>How we know it works</h4>
+      <ul class="check">
+        <li>Each of the three answers shown matches what the viewer chose for that clip, or shows that they skipped it.</li>
+        <li>The three lens clips are named; the unfiltered clip has no name or text. All four can be replayed.</li>
+        <li>Nothing marks an answer as right or wrong.</li>
+        <li>The closing question is visible.</li>
+        <li>Start again returns to the opening screen with earlier answers cleared.</li>
+        <li>If the clips are separate takes, the reveal says they are similar takes, not identical footage.</li>
+      </ul>
+    </section>
+  </div>
+
+  <h2>Look and feel</h2>
+  <div class="card">
+    <div class="swatches" aria-hidden="true"><i style="background:#15101f"></i><i style="background:#6b3fd6"></i><i style="background:#9a97a3"></i><i style="background:#ffffff"></i></div>
+    <p>Purple, white, and grey on a dark background, "like a cinema", so the clips carry the emotion. Text that is "sharp and modern". Reflective and inviting in tone: the viewer should feel "less tricked", never tested or graded.</p>
+    <p class="muted">The exact shades above are only an illustration; they are chosen in the technical plan.</p>
+  </div>
+
+  <h2>What if?</h2>
+  <div class="grid">
+    <div class="card"><h3>They don't want to answer</h3><p class="muted">They can skip. The reveal then shows "You skipped this one" for that clip.</p></div>
+    <div class="card"><h3>They skip all three</h3><p class="muted">The reveal still appears, with the four clips and the closing question.</p></div>
+    <div class="card"><h3>They want to change an answer</h3><p class="muted">Not possible. "They have to start over."</p></div>
+    <div class="card"><h3>They close or reload the page <span class="assume">assumption</span></h3><p class="muted">It begins again from the opening screen. Nothing is kept.</p></div>
+    <div class="card"><h3>A clip will not play <span class="assume">assumption</span></h3><p class="muted">A short message says the clip could not be played, instead of a blank screen.</p></div>
+    <div class="card"><h3>Sound <span class="assume">assumption</span></h3><p class="muted">Each clip starts when the viewer presses play or start, so sound is never a surprise.</p></div>
+  </div>
+
+  <h2>Your decisions</h2>
+  <details open>
+    <summary>Your decisions, with your reasons</summary>
+    <ul>
+      <li>Order: angry, sad, happy, then normal. <span>Angry is "a great hook"; sad is where the viewer "will totally understand the lyrics and feel deeply"; happy uses the happier mix of the same song.</span></li>
+      <li>The opening gives a small hint, as text on screen. <span>"Less tricked is a safe thing."</span></li>
+      <li>Replay before answering is allowed. <span>Watching again makes the viewer reflect.</span></li>
+      <li>One question per clip, and skipping is allowed. <span>The viewer answers or skips. No changing afterwards: "they have to start over."</span></li>
+      <li>The second question was removed. <span>"How does this clip make you feel?" asked about the viewer's own feelings; you removed "the most personal one."</span></li>
+      <li>No privacy note on the page. <span>People "will still think oh yes is this really true."</span></li>
+      <li>The three lenses are finished: <span>Cartoon Rage Face, Tearful Gaze, Mega Joy Face.</span></li>
+      <li>The normal clip gets its own moment before the reveal.</li>
+      <li>The normal clip has no music and no text. <span>"Because the user have to think. Maybe sometimes you need quiet moments or sometimes you need music."</span></li>
+      <li>The reveal layout. <span>Recommended by the agent and accepted: "exactly the way I kind of imagine."</span></li>
+      <li>Purple, white, grey; dark like a cinema; sharp, modern text.</li>
+      <li>The music is yours. <span>You mix it and deliver it as part of each clip.</span></li>
+    </ul>
+  </details>
+
+  <h2>The boundary</h2>
+  <details>
+    <summary>Deferred: implied, but not now</summary>
+    <ul>
+      <li>Putting it online for the whole audience. <span>The prototype runs on your computer for the demo video.</span></li>
+      <li>Showing how other viewers answered. <span>Needs answers to be stored, which the scope cut.</span></li>
+      <li>More settings and rounds (the store, the workout).</li>
+    </ul>
+  </details>
+  <details>
+    <summary>Not doing: non-goals</summary>
+    <ul>
+      <li>No accounts and no saved results.</li>
+      <li>No live camera, and no lenses applied inside the app.</li>
+      <li>No scoring.</li>
+      <li>No choosing the order. <span>The order is part of the piece.</span></li>
+    </ul>
+  </details>
+  <details>
+    <summary>Possible later</summary>
+    <ul>
+      <li>A longer 1–3 minute piece edited in CapCut.</li>
+      <li>"From room to scene". <span>A separate idea, parked in the scope.</span></li>
+    </ul>
+  </details>
+
+  <h2>Still open (none of these block the next step)</h2>
+  <div class="grid">
+    <div class="card"><h3>One recording or three takes</h3><p class="q">For you to test in Snapchat or Lens Studio.</p></div>
+    <div class="card"><h3>Final wording</h3><p class="q">The opening text and the normal clip line are drafts.</p></div>
+    <div class="card"><h3>Clip length</h3><p class="q">About 5–10 seconds each was recommended; not confirmed.</p></div>
+  </div>
+
+  <footer>Companion to <code>devpost/prd.md</code>, which stays the official version.</footer>
+</main>
+<script>
+  var wrap = document.getElementById("screens"), tabs = document.getElementById("tabs");
+  var screens = wrap.querySelectorAll(".screen");
+  wrap.classList.remove("nojs");
+  function show(i) {
+    Array.prototype.forEach.call(screens, function (s, j) { s.classList.toggle("on", j === i); });
+    Array.prototype.forEach.call(tabs.children, function (b, j) { b.setAttribute("aria-pressed", j === i); });
+  }
+  Array.prototype.forEach.call(screens, function (s, i) {
+    var b = document.createElement("button"); b.type = "button";
+    b.textContent = (i + 1) + " " + s.getAttribute("data-name");
+    b.onclick = function () { show(i); }; tabs.appendChild(b);
+  });
+  show(0);
+</script>
+</body>
+</html>
