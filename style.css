@@ -94,12 +94,41 @@ html, body {
   background: #000;
   border: 1px solid var(--line);
 }
+.player { position: relative; }
 .player video {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 }
+
+/* Small notes laid over the clip: the sound reminder and the error message */
+.player-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0 16px;
+  text-align: center;
+  color: var(--white);
+}
+.player-note[hidden] { display: none; }
+.sound-reminder {
+  top: 16px;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  animation: fade-out 600ms ease-in 2.4s both;
+}
+.clip-error {
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--grey);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+@keyframes fade-out { to { opacity: 0; } }
 
 .question { display: flex; flex-direction: column; gap: 12px; }
 .question[hidden] { display: none; }

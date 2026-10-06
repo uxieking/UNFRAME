@@ -8,6 +8,8 @@ const TEXTS = {
   openingText:
     "You are about to watch a few short clips. After each one, tell us what you see. There are no wrong answers.",
   startButton: "Start",
+  soundReminder: "Sound on",
+  clipError: "This clip could not be played.",
   question: "How would you describe this person's mood?",
   choices: ["Happy", "Sad", "Angry", "Scared", "Surprised", "Unsure"],
   replayButton: "Watch again",
@@ -51,6 +53,8 @@ const screens = {
 const video = document.getElementById("clip-video");
 const questionPanel = document.getElementById("question-panel");
 const continueButton = document.getElementById("continue-button");
+const soundReminder = document.getElementById("sound-reminder");
+const clipError = document.getElementById("clip-error");
 
 // Show one screen, hide the others, with a short fade in.
 function showScreen(name) {
@@ -72,6 +76,8 @@ function fillTexts() {
   document.getElementById("replay-button").textContent = TEXTS.replayButton;
   document.getElementById("skip-button").textContent = TEXTS.skipButton;
   continueButton.textContent = TEXTS.continueButton;
+  soundReminder.textContent = TEXTS.soundReminder;
+  clipError.textContent = TEXTS.clipError;
   document.getElementById("takes-note").textContent = TEXTS.takesNote;
   document.getElementById("closing-question").textContent = TEXTS.closingQuestion;
   document.getElementById("restart-button").textContent = TEXTS.restartButton;
@@ -92,6 +98,8 @@ function startJourney() {
   currentClip = 0;
   showScreen("clip");
   playClip(LENS_CLIPS[currentClip].file);
+  // A small reminder over the first clip only; it fades by itself.
+  soundReminder.hidden = false;
 }
 
 // Play a clip in the big player, with a short fade between clips.
@@ -99,11 +107,16 @@ function startJourney() {
 function playClip(file) {
   questionPanel.hidden = true;
   continueButton.hidden = true;
+  clipError.hidden = true;
+  soundReminder.hidden = true;
   video.classList.add("is-fading");
   setTimeout(() => {
     video.src = file;
-    video.play();
     video.classList.remove("is-fading");
+    video.play().catch((error) => {
+      // If the browser holds the clip back, show its own play button.
+      if (error.name === "NotAllowedError") video.controls = true;
+    });
   }, video.getAttribute("src") ? 300 : 0);
 }
 
@@ -111,14 +124,25 @@ function isNormalClip() {
   return currentClip >= LENS_CLIPS.length;
 }
 
-// When a lens clip ends, the question appears underneath it.
-// When the normal clip ends, only the continue button appears.
-video.addEventListener("ended", () => {
+// What comes after a clip: the question after a lens clip,
+// only the continue button after the normal clip.
+function showAfterClip() {
+  video.controls = false;
   if (isNormalClip()) {
     continueButton.hidden = false;
   } else {
     questionPanel.hidden = false;
   }
+}
+
+video.addEventListener("ended", showAfterClip);
+
+// A clip that cannot be played: say so, and let the journey continue.
+video.addEventListener("error", () => {
+  if (!video.getAttribute("src")) return; // emptied on purpose at the reveal
+  soundReminder.hidden = true;
+  clipError.hidden = false;
+  showAfterClip();
 });
 
 function replayClip() {

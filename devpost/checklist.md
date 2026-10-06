@@ -29,7 +29,7 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
   Learner check: Go through the whole journey on the computer with the window narrow like a phone. At the reveal, tap the clips to compare them, read your answers, and say whether the reveal feels the way you imagined. Then press start again.
   Commit: `Add normal clip screen and full reveal`
 
-- [ ] **3. Handles a missing clip and no sound, and has a README**
+- [x] **3. Handles a missing clip and no sound, and has a README**
   Becomes usable: If a clip cannot be played, the clip area says "This clip could not be played." and the question still appears, so the journey continues. A small "sound on" reminder sits on the screen before the first clip. `README.md` says what UNFRAME is, how to open it, and that it does not save or send any answers.
   Why now: These protect the demo and the public repository. They only make sense once the whole journey exists to protect.
   PRD ref: `prd.md > States and Boundaries` (a clip that will not play)
@@ -63,3 +63,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 ## Revisions
 - Six answer choices instead of four (scared and surprised added) — the creator asked for them after slice 1 was built; scope, PRD and spec updated to match.
 - Short visual transitions added to slice 2 (fades between screens and clips; reveal builds up clip by clip, answers next, closing question last; no sound effects) — the learner's early check found the ending needed to feel more exciting.
+- The sound reminder sits over the first clip for about three seconds and fades out, instead of on the opening screen — the opening screen must stay name, text and button only (`spec.md > Look and Feel`). If the browser blocks a clip from playing, its own play button is shown so the journey can continue.
