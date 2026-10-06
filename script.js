@@ -48,6 +48,10 @@ const EFFECT_SECONDS = 2.5;
 let answers = [];
 let currentClip = 0;
 
+// Which time through the test this is. Every second time, the effects
+// are reversed. Starts again from the first when the page is reloaded.
+let round = 0;
+
 const screens = {
   opening: document.getElementById("screen-opening"),
   clip: document.getElementById("screen-clip"),
@@ -99,6 +103,7 @@ function fillTexts() {
 function startJourney() {
   answers = [];
   currentClip = 0;
+  round++;
   showScreen("clip");
   playClip(LENS_CLIPS[currentClip].file);
   // A small reminder over the first clip only; it fades by itself.
@@ -146,7 +151,8 @@ video.addEventListener("ended", showAfterClip);
 video.addEventListener("timeupdate", () => {
   if (isNormalClip() || Effects.isRunning()) return;
   if (video.duration - video.currentTime <= EFFECT_SECONDS) {
-    Effects.start(LENS_CLIPS[currentClip].name);
+    const reversed = round % 2 === 0;
+    Effects.start(LENS_CLIPS[currentClip].name, reversed);
   }
 });
 

@@ -46,8 +46,8 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
 
 ## Final Review
 
-- [x] End-of-clip effects for the three lens clips (angry: squares press in, sparks, cracks with warm light; sad: blue and purple drops with rings, one gold drop rising; happy: gold bubbles and shapes that bounce and grow, one blue drop dancing). They come in 2.5 s before each lens clip ends and stay while the question shows; the normal clip stays quiet. Verified in the browser; learner still to see it.
-- [ ] Second run: reversed effects when the viewer takes the test again (meaning being clarified with the learner).
+- [ ] End-of-clip effects for the three lens clips (angry: squares press in, sparks, cracks with warm light; sad: blue and purple drops with rings, one gold drop rising; happy: gold bubbles and shapes that bounce and grow, one blue drop dancing). They come in 2.5 s before each lens clip ends and stay while the question shows; the normal clip stays quiet. Verified in the browser; learner still to see it.
+- [ ] Reversed effects every second time through (start again): angry — squares pull back, cracks heal, warm light fills the screen; sad — many gold drops rise, one blue drop falls and rings; happy — blue drops bounce and grow, one gold bubble dances. A reload starts with the forward effects. Verified in the browser; learner still to see it.
 - [ ] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map

@@ -5,6 +5,8 @@
 //   angry — squares press in, sparks and cracks, warm light in the cracks
 //   sad   — blue and purple drops fall and ring, one gold drop rises
 //   happy — gold bubbles and shapes bounce and grow, one blue drop dances
+// When the viewer takes the test again, each effect is reversed:
+// the counterweight becomes the main thing and the movement turns around.
 // No one is only what you see and feel.
 // ===================================================================
 
@@ -18,6 +20,12 @@ const Effects = (() => {
 
   const rand = (min, max) => min + Math.random() * (max - min);
   const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const clamp01 = (value) => Math.min(1, Math.max(0, value));
+
+  const GOLD = "rgba(255, 215, 120, 1)";
+  const GOLD_GLOW = "rgba(255, 200, 90, 1)";
+  const BLUE = "rgba(90, 140, 255, 1)";
+  const BLUE_GLOW = "rgba(90, 140, 255, 0.9)";
 
   function resize() {
     const ratio = window.devicePixelRatio || 1;
@@ -28,60 +36,101 @@ const Effects = (() => {
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
 
-  // A teardrop pointing up, centred on (x, y).
-  function drop(x, y, size, color, glow) {
+  // A teardrop centred on (x, y), pointing up (or down when flipped).
+  function drop(x, y, size, color, glow, flipped) {
     ctx.save();
+    ctx.translate(x, y);
+    if (flipped) ctx.scale(1, -1);
     ctx.fillStyle = color;
     if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = size * 3; }
     ctx.beginPath();
-    ctx.moveTo(x, y - size * 1.6);
-    ctx.bezierCurveTo(x + size, y - size * 0.4, x + size, y + size, x, y + size);
-    ctx.bezierCurveTo(x - size, y + size, x - size, y - size * 0.4, x, y - size * 1.6);
+    ctx.moveTo(0, -size * 1.6);
+    ctx.bezierCurveTo(size, -size * 0.4, size, size, 0, size);
+    ctx.bezierCurveTo(-size, size, -size, -size * 0.4, 0, -size * 1.6);
     ctx.fill();
     ctx.restore();
   }
 
+  function ring(r, rings) {
+    ctx.save();
+    ctx.globalAlpha *= r.life;
+    ctx.strokeStyle = r.color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(r.x, r.y, r.r, r.r * 0.3, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function updateRings(rings, dt) {
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const r = rings[i];
+      r.life -= dt * 0.8;
+      if (r.life <= 0) { rings.splice(i, 1); continue; }
+      r.r += 30 * dt;
+      ring(r);
+    }
+  }
+
   // ---------- Angry ----------
-  function angry() {
+  // Forward: squares press in, cracks grow with sparks, a little warm light.
+  // Reversed: squares pull back, cracks heal, the warm light fills the screen.
+  function angry(reversed) {
     const squares = [];
     for (let i = 0; i < 10; i++) {
-      const edge = i % 4; // 0 top, 1 right, 2 bottom, 3 left
-      const size = rand(28, 60);
-      const along = rand(0.1, 0.9);
-      const depth = rand(0.06, 0.2);
-      squares.push({ edge, size, along, depth, angle: rand(-0.3, 0.3), t: -rand(0, 0.8) });
+      squares.push({
+        edge: i % 4, // 0 top, 1 right, 2 bottom, 3 left
+        size: rand(28, 60),
+        along: rand(0.1, 0.9),
+        depth: rand(0.06, 0.2),
+        angle: rand(-0.3, 0.3),
+        t: -rand(0, 0.8),
+      });
     }
+
     const cracks = [];
     for (let i = 0; i < 5; i++) {
       const fromLeft = Math.random() < 0.5;
       const start = { x: fromLeft ? rand(0, 0.15) * width : rand(0.85, 1) * width, y: rand(0.1, 0.9) * height };
-      cracks.push({ points: [start], heading: Math.atan2(height / 2 - start.y, width / 2 - start.x), grow: rand(0.7, 1.2), delay: rand(0.2, 1.0) });
+      const crack = { points: [start], heading: Math.atan2(height / 2 - start.y, width / 2 - start.x), grow: rand(0.7, 1.2), delay: rand(0.2, 1.0) };
+      if (reversed) while (crack.points.length < 14) growCrack(crack, null);
+      cracks.push(crack);
     }
     const sparks = [];
     let time = 0;
 
+    function growCrack(crack, sparkList) {
+      const last = crack.points[crack.points.length - 1];
+      crack.heading += rand(-0.6, 0.6);
+      const step = rand(10, 22) * crack.grow;
+      const next = { x: last.x + Math.cos(crack.heading) * step, y: last.y + Math.sin(crack.heading) * step };
+      crack.points.push(next);
+      if (sparkList) {
+        for (let s = 0; s < 3; s++) {
+          sparkList.push({ x: next.x, y: next.y, vx: rand(-90, 90), vy: rand(-120, 20), life: rand(0.3, 0.7) });
+        }
+      }
+    }
+
     return (dt) => {
       time += dt;
 
-      // Warm light: behind everything, it slowly opens up as the cracks grow
-      const warmth = Math.min(1, Math.max(0, (time - 0.6) / 1.2)) * (0.75 + 0.25 * Math.sin(time * 3));
-      const glow = ctx.createRadialGradient(width / 2, height * 0.55, 0, width / 2, height * 0.55, width * 0.8);
-      glow.addColorStop(0, `rgba(255, 180, 110, ${0.22 * warmth})`);
+      // Warm light behind everything
+      const opening = clamp01((time - (reversed ? 0.2 : 0.6)) / 1.2);
+      const pulse = 0.75 + 0.25 * Math.sin(time * 3);
+      const strength = reversed ? 0.25 + 0.35 * opening : 0.22 * opening;
+      const reach = reversed ? width * (0.8 + 0.6 * opening) : width * 0.8;
+      const glow = ctx.createRadialGradient(width / 2, height * 0.55, 0, width / 2, height * 0.55, reach);
+      glow.addColorStop(0, `rgba(255, 180, 110, ${strength * pulse})`);
       glow.addColorStop(1, "rgba(255, 180, 110, 0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
 
-      // Cracks grow in short jagged steps; warm light shows inside them
+      // Cracks: grow with sparks, or heal from the tip back to the edge
       for (const crack of cracks) {
-        if (time > crack.delay && crack.points.length < 14) {
-          const last = crack.points[crack.points.length - 1];
-          crack.heading += rand(-0.6, 0.6);
-          const step = rand(10, 22) * crack.grow;
-          const next = { x: last.x + Math.cos(crack.heading) * step, y: last.y + Math.sin(crack.heading) * step };
-          crack.points.push(next);
-          for (let s = 0; s < 3; s++) {
-            sparks.push({ x: next.x, y: next.y, vx: rand(-90, 90), vy: rand(-120, 20), life: rand(0.3, 0.7) });
-          }
+        if (time > crack.delay) {
+          if (!reversed && crack.points.length < 14) growCrack(crack, sparks);
+          if (reversed && crack.points.length > 1 && Math.random() < 0.5) crack.points.pop();
         }
         if (crack.points.length < 2) continue;
         ctx.save();
@@ -112,11 +161,13 @@ const Effects = (() => {
         ctx.fillRect(s.x, s.y, 2, 2);
       }
 
-      // Squares press in from the edges and keep pushing
+      // Squares: press in and keep pushing, or start pressed in and pull back
       for (const sq of squares) {
         sq.t += dt;
-        const ease = Math.min(1, Math.max(0, sq.t / 0.9));
-        const push = (1 - Math.pow(1 - ease, 3)) * sq.depth + Math.sin(time * 9 + sq.along * 10) * 0.004;
+        const ease = 1 - Math.pow(1 - clamp01(sq.t / (reversed ? 1.4 : 0.9)), 3);
+        const amount = reversed ? 1 - ease : ease;
+        const shake = reversed ? 0 : Math.sin(time * 9 + sq.along * 10) * 0.004;
+        const push = amount * sq.depth + shake;
         let x, y;
         if (sq.edge === 0) { x = sq.along * width; y = -sq.size + push * height + sq.size / 2; }
         if (sq.edge === 2) { x = sq.along * width; y = height + sq.size - push * height - sq.size / 2; }
@@ -136,72 +187,106 @@ const Effects = (() => {
   }
 
   // ---------- Sad ----------
-  function sad() {
-    const drops = [];
+  // Forward: many blue and purple drops fall and ring, one gold drop rises.
+  // Reversed: many gold drops rise and shine, one blue drop falls and rings.
+  function sad(reversed) {
+    const floor = height - 8;
+    const many = [];
     for (let i = 0; i < 18; i++) {
-      drops.push({ x: rand(0, width), y: rand(-height * 0.3, height * 0.7), speed: rand(35, 75), size: rand(2.5, 4.5), color: pick(["rgba(110, 150, 255, 0.75)", "rgba(165, 120, 255, 0.75)"]) });
+      many.push({
+        x: rand(0, width),
+        y: rand(-height * 0.3, height * 0.7),
+        speed: rand(35, 75),
+        size: rand(2.5, 4.5),
+        color: reversed ? GOLD : pick(["rgba(110, 150, 255, 0.75)", "rgba(165, 120, 255, 0.75)"]),
+      });
     }
+    if (reversed) for (const d of many) d.y = height - d.y;
+    const one = { base: width * rand(0.35, 0.65), y: reversed ? -10 : height + 10 };
     const rings = [];
-    const gold = { x: width * rand(0.35, 0.65), y: height + 10, base: 0 };
-    gold.base = gold.x;
     let time = 0;
 
     return (dt) => {
       time += dt;
-      const floor = height - 8;
 
-      for (const d of drops) {
-        d.y += d.speed * dt;
-        if (d.y >= floor) {
-          rings.push({ x: d.x, y: floor, r: 0, life: 1, color: d.color });
-          d.x = rand(0, width);
-          d.y = rand(-60, -10);
+      for (const d of many) {
+        if (reversed) {
+          // Gold drops rise, swaying a little, and shine
+          d.y -= d.speed * dt;
+          if (d.y < -20) { d.x = rand(0, width); d.y = height + rand(10, 60); }
+          drop(d.x + Math.sin(time * 1.4 + d.speed) * 4, d.y, d.size, d.color, GOLD_GLOW);
+        } else {
+          d.y += d.speed * dt;
+          if (d.y >= floor) {
+            rings.push({ x: d.x, y: floor, r: 0, life: 1, color: d.color });
+            d.x = rand(0, width);
+            d.y = rand(-60, -10);
+          }
+          drop(d.x, d.y, d.size, d.color);
         }
-        drop(d.x, d.y, d.size, d.color);
       }
 
-      // Small rings where the drops land
-      for (let i = rings.length - 1; i >= 0; i--) {
-        const ring = rings[i];
-        ring.life -= dt * 0.8;
-        if (ring.life <= 0) { rings.splice(i, 1); continue; }
-        ring.r += 30 * dt;
-        ctx.save();
-        ctx.globalAlpha = ring.life;
-        ctx.strokeStyle = ring.color;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.ellipse(ring.x, ring.y, ring.r, ring.r * 0.3, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-      }
+      updateRings(rings, dt);
 
-      // One gold drop floats upward and shines: hope in the heavy
-      gold.y -= 28 * dt;
-      gold.x = gold.base + Math.sin(time * 1.4) * 10;
-      if (gold.y < -20) { gold.y = height + 10; gold.base = width * rand(0.35, 0.65); }
-      drop(gold.x, gold.y, 5, "rgba(255, 215, 120, 1)", "rgba(255, 200, 90, 1)");
+      // The one that goes the other way
+      const x = one.base + Math.sin(time * 1.4) * 10;
+      if (reversed) {
+        one.y += 28 * dt;
+        if (one.y >= floor) {
+          rings.push({ x, y: floor, r: 0, life: 1, color: BLUE });
+          one.y = -10;
+          one.base = width * rand(0.35, 0.65);
+        }
+        drop(x, one.y, 5, BLUE, BLUE_GLOW);
+      } else {
+        one.y -= 28 * dt;
+        if (one.y < -20) { one.y = height + 10; one.base = width * rand(0.35, 0.65); }
+        drop(x, one.y, 5, GOLD, GOLD_GLOW);
+      }
     };
   }
 
   // ---------- Happy ----------
-  function happy() {
+  // Forward: gold bubbles and colourful shapes bounce and grow, one blue drop dances.
+  // Reversed: blue drops bounce and grow, one gold bubble dances among them.
+  function happy(reversed) {
     const colors = ["#ffd36b", "#ff7ab6", "#7af0c8", "#b58cff", "#ffa95b"];
     const shapes = [];
     for (let i = 0; i < 14; i++) {
-      const bubble = i < 6;
       const angle = rand(0, Math.PI * 2);
       const speed = rand(60, 120);
+      let kind, color;
+      if (reversed) { kind = "drop"; color = pick([BLUE, "rgba(120, 165, 255, 1)", "rgba(70, 110, 230, 1)"]); }
+      else if (i < 6) { kind = "bubble"; color = "#ffd36b"; }
+      else { kind = pick(["circle", "triangle", "square"]); color = pick(colors); }
       shapes.push({
-        kind: bubble ? "bubble" : pick(["circle", "triangle", "square"]),
-        color: bubble ? "#ffd36b" : pick(colors),
+        kind, color,
         x: rand(30, width - 30), y: rand(30, height - 30),
         vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
         r: rand(7, 14), spin: rand(-2, 2), angle: 0, touching: new Set(),
       });
     }
-    const blue = { phase: rand(0, 10) };
+    const phase = rand(0, 10);
     let time = 0;
+
+    function bubble(x, y, r) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.strokeStyle = "#ffd36b";
+      ctx.lineWidth = 1.5;
+      ctx.fillStyle = "rgba(255, 211, 107, 0.18)";
+      ctx.shadowColor = "rgba(255, 200, 90, 0.8)";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      ctx.beginPath();
+      ctx.arc(-r * 0.35, -r * 0.35, r * 0.18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
 
     return (dt) => {
       time += dt;
@@ -234,45 +319,32 @@ const Effects = (() => {
       }
 
       for (const s of shapes) {
+        if (s.kind === "bubble") { bubble(s.x, s.y, s.r); continue; }
+        if (s.kind === "drop") { drop(s.x, s.y, s.r * 0.55, s.color, BLUE_GLOW); continue; }
         ctx.save();
         ctx.translate(s.x, s.y);
         ctx.rotate(s.angle);
-        ctx.strokeStyle = s.color;
-        ctx.lineWidth = 1.5;
-        if (s.kind === "bubble") {
-          ctx.fillStyle = "rgba(255, 211, 107, 0.18)";
-          ctx.shadowColor = "rgba(255, 200, 90, 0.8)";
-          ctx.shadowBlur = 8;
-          ctx.beginPath();
-          ctx.arc(0, 0, s.r, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-          ctx.beginPath();
-          ctx.arc(-s.r * 0.35, -s.r * 0.35, s.r * 0.18, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          ctx.fillStyle = s.color;
-          ctx.globalAlpha = 0.8;
-          ctx.beginPath();
-          if (s.kind === "circle") ctx.arc(0, 0, s.r * 0.8, 0, Math.PI * 2);
-          if (s.kind === "square") ctx.rect(-s.r * 0.7, -s.r * 0.7, s.r * 1.4, s.r * 1.4);
-          if (s.kind === "triangle") {
-            ctx.moveTo(0, -s.r);
-            ctx.lineTo(s.r * 0.87, s.r * 0.5);
-            ctx.lineTo(-s.r * 0.87, s.r * 0.5);
-            ctx.closePath();
-          }
-          ctx.fill();
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha *= 0.8;
+        ctx.beginPath();
+        if (s.kind === "circle") ctx.arc(0, 0, s.r * 0.8, 0, Math.PI * 2);
+        if (s.kind === "square") ctx.rect(-s.r * 0.7, -s.r * 0.7, s.r * 1.4, s.r * 1.4);
+        if (s.kind === "triangle") {
+          ctx.moveTo(0, -s.r);
+          ctx.lineTo(s.r * 0.87, s.r * 0.5);
+          ctx.lineTo(-s.r * 0.87, s.r * 0.5);
+          ctx.closePath();
         }
+        ctx.fill();
         ctx.restore();
       }
 
-      // One blue drop joins this dance: joy doesn't mean everything is light
-      const t = time + blue.phase;
-      const bx = width / 2 + Math.sin(t * 1.3) * width * 0.32;
-      const by = height / 2 + Math.sin(t * 2.1) * height * 0.3;
-      drop(bx, by, 6, "rgba(90, 140, 255, 1)", "rgba(90, 140, 255, 0.9)");
+      // The one that joins this dance
+      const t = time + phase;
+      const x = width / 2 + Math.sin(t * 1.3) * width * 0.32;
+      const y = height / 2 + Math.sin(t * 2.1) * height * 0.3;
+      if (reversed) bubble(x, y, 12);
+      else drop(x, y, 6, BLUE, BLUE_GLOW);
     };
   }
 
@@ -305,13 +377,13 @@ const Effects = (() => {
       ctx = canvas.getContext("2d");
       window.addEventListener("resize", () => { if (current) resize(); });
     },
-    // Start the effect for a lens clip (angry, sad or happy).
-    start(name) {
+    // Start the effect for a lens clip (angry, sad or happy), forward or reversed.
+    start(name, reversed) {
       if (!EFFECTS[name]) return;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       clear();
       resize();
-      current = EFFECTS[name]();
+      current = EFFECTS[name](reversed);
       lastTime = performance.now();
       frame = requestAnimationFrame(loop);
     },
