@@ -19,7 +19,7 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
   Learner check: Double-click `index.html`, press start, and watch all three clips with the sound on. Answer two and skip one, and try replay once. See whether the list at the end matches what you chose, and say how the opening screen and the clip screen feel.
   Commit: `Add opening screen, three lens clips with question, and answer list`
 
-- [ ] **2. The quiet normal clip and the full reveal**
+- [x] **2. The quiet normal clip and the full reveal**
   Becomes usable: After the third answer, the normal clip plays alone with no text and a continue button. The reveal shows the four clips two by two: the three lens clips named, with "Lens: angry. You said: sad." under each, and the normal clip with no name. Tapping a clip plays it and stops any other. The closing question stands at the bottom, and start again clears everything and returns to the opening screen. If the "similar takes" setting is yes, one line says so.
   Why now: It builds directly on the answer list from slice 1 and turns it into the compelling moment, the reveal. It needs slice 1's journey to land on.
   PRD ref: `prd.md > The normal clip`, `prd.md > The reveal`, `prd.md > States and Boundaries`
@@ -41,7 +41,7 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 1: the learner watches the three clips with sound, answers, and judges the opening screen and clip screen before the reveal is built
+- [x] Early usable behavior explored — after slice 1: the learner watches the three clips with sound, answers, and judges the opening screen and clip screen before the reveal is built. Feedback: "looks good", but the end is missing something and should be more exciting — short visual transitions on screen, no sound effects. Folded into slice 2.
 - [ ] Final kick-the-tires exploration and feedback completed — after slice 3: the whole journey, including handing the opening screen to one other person without explaining (from `spec.md > Decisions and Open Issues`)
 
 ## Final Review
@@ -62,3 +62,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 
 ## Revisions
 - Six answer choices instead of four (scared and surprised added) — the creator asked for them after slice 1 was built; scope, PRD and spec updated to match.
+- Short visual transitions added to slice 2 (fades between screens and clips; reveal builds up clip by clip, answers next, closing question last; no sound effects) — the learner's early check found the ending needed to feel more exciting.

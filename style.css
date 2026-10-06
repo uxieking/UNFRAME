@@ -123,25 +123,87 @@ html, body {
 }
 .question-actions .button { font-size: 0.7rem; padding: 10px; }
 
-/* 3. Reveal (first version): the answer list */
-.screen-reveal { justify-content: center; }
-.answer-list {
-  list-style: none;
-  margin: 0;
+.screen-clip > .button-primary { width: 100%; }
+.screen-clip > .button-primary[hidden] { display: none; }
+
+/* 3. Reveal: four clips two by two, answers under, closing question last */
+.screen-reveal { gap: 20px; }
+.reveal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 10px;
+}
+.tile { display: flex; flex-direction: column; gap: 8px; }
+.tile-video {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border: 1px solid var(--line);
+  cursor: pointer;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
-.answer-list li {
-  border-left: 1px solid var(--purple);
-  padding: 4px 0 4px 16px;
-  line-height: 1.5;
-}
-.answer-list .lens-name {
+.tile-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  font-size: 0.75rem;
+}
+.tile-video.is-playing { border-color: var(--purple); }
+.tile-video:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+/* A small play mark, hidden while the clip plays */
+.tile-video::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-35%, -50%);
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent rgba(245, 243, 250, 0.85);
+}
+.tile-video.is-playing::after { display: none; }
+.tile-name {
+  margin: 0;
+  font-size: 0.7rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--grey);
+}
+.tile-answer {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border-left: 1px solid var(--purple);
+  padding-left: 10px;
+}
+.takes-note {
+  margin: 0;
+  color: var(--grey);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.takes-note[hidden] { display: none; }
+.closing-question {
+  margin: 8px 0 0;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: center;
+}
+.restart { align-self: center; margin-bottom: 8px; }
+
+/* Transitions: short fades on screen, no sound */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.screen.is-entering { animation: fade-in 500ms ease-out both; }
+.player video { transition: opacity 300ms ease; }
+.player video.is-fading { opacity: 0; }
+.appear { opacity: 0; animation: fade-in 600ms ease-out both; animation-delay: var(--delay, 0ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen.is-entering, .appear { animation: none; opacity: 1; }
+  .player video { transition: none; }
 }

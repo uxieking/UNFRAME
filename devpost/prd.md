@@ -37,6 +37,7 @@ On every screen the clip is the largest thing. The eye should travel from the cl
 - **Background:** dark, "like a cinema", so the clips carry the emotion.
 - **Text:** sharp and modern.
 - **Tone:** reflective and inviting. The viewer should feel "less tricked", never tested or graded.
+- **Transitions:** short visual transitions on screen, no sound effects. The reveal should feel exciting as it builds up (2026-10-06).
 - **Brand:** this is a LENSVRA piece.
 
 ## Features and Behavior

@@ -17,7 +17,7 @@
       <button id="start-button" class="button button-primary" type="button"></button>
     </section>
 
-    <!-- 2. Clip screen: one player, reused for every lens clip -->
+    <!-- 2. Clip screen: one player, reused for the three lens clips and the normal clip -->
     <section id="screen-clip" class="screen screen-clip" hidden>
       <div class="player">
         <video id="clip-video" playsinline preload="auto"></video>
@@ -31,11 +31,17 @@
           <button id="skip-button" class="button button-ghost" type="button"></button>
         </div>
       </div>
+
+      <!-- Only after the normal clip: no question, no text, just a way on -->
+      <button id="continue-button" class="button button-primary appear" type="button" hidden></button>
     </section>
 
-    <!-- 3. Reveal screen (first version: the answer list) -->
+    <!-- 3. Reveal screen: all four clips, the viewer's answers, the closing question -->
     <section id="screen-reveal" class="screen screen-reveal" hidden>
-      <ul id="answer-list" class="answer-list"></ul>
+      <div id="reveal-grid" class="reveal-grid"></div>
+      <p id="takes-note" class="takes-note" hidden></p>
+      <p id="closing-question" class="closing-question"></p>
+      <button id="restart-button" class="button button-ghost restart" type="button"></button>
     </section>
 
   </main>

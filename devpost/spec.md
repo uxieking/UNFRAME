@@ -60,6 +60,7 @@ Carries forward `prd.md > Look and Feel`.
 - **Layout:** built for a phone held upright. One column. The vertical clip fills most of the screen; on a computer the same tall column sits centered.
 - **Opening screen, to be eye-catching at once:** one name, one short text, one purple button, and nothing else, all visible without scrolling. The start button is the only purple thing on the screen, so the eye goes to it.
 - **Tone of the words:** calm and inviting. No "correct", "wrong", or "score" anywhere.
+- **Transitions** (2026-10-06, from the creator's first test): short visual fades between screens and between clips, no sound effects. The reveal builds up: the four clips appear one by one, then the answers, then the closing question on its own.
 
 ## Components
 
