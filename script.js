@@ -36,6 +36,9 @@ const NORMAL_CLIP = "media/clip-normal.mp4";
 // Yes/no: are the clips similar takes rather than one identical recording?
 const SIMILAR_TAKES = false;
 
+// How many seconds before a lens clip ends its effect comes in (see effects.js).
+const EFFECT_SECONDS = 2.5;
+
 // ===================================================================
 // THE JOURNEY
 // ===================================================================
@@ -109,6 +112,7 @@ function playClip(file) {
   continueButton.hidden = true;
   clipError.hidden = true;
   soundReminder.hidden = true;
+  Effects.stop();
   video.classList.add("is-fading");
   setTimeout(() => {
     video.src = file;
@@ -137,6 +141,15 @@ function showAfterClip() {
 
 video.addEventListener("ended", showAfterClip);
 
+// Near the end of each lens clip, its effect comes in and stays
+// while the question is on screen. The normal clip stays quiet.
+video.addEventListener("timeupdate", () => {
+  if (isNormalClip() || Effects.isRunning()) return;
+  if (video.duration - video.currentTime <= EFFECT_SECONDS) {
+    Effects.start(LENS_CLIPS[currentClip].name);
+  }
+});
+
 // A clip that cannot be played: say so, and let the journey continue.
 video.addEventListener("error", () => {
   if (!video.getAttribute("src")) return; // emptied on purpose at the reveal
@@ -146,6 +159,7 @@ video.addEventListener("error", () => {
 });
 
 function replayClip() {
+  Effects.stop();
   video.currentTime = 0;
   video.play();
 }
@@ -166,6 +180,7 @@ function recordAnswer(chosen) {
 // The reveal builds up: the clips one by one, then the answers,
 // then the closing question on its own.
 function showReveal() {
+  Effects.stop();
   video.pause();
   video.removeAttribute("src");
   video.load();
@@ -274,4 +289,5 @@ document.getElementById("skip-button").addEventListener("click", () => recordAns
 continueButton.addEventListener("click", showReveal);
 document.getElementById("restart-button").addEventListener("click", restart);
 
+Effects.init(document.getElementById("effects-layer"));
 fillTexts();

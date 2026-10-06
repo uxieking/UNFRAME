@@ -38,6 +38,7 @@ On every screen the clip is the largest thing. The eye should travel from the cl
 - **Text:** sharp and modern.
 - **Tone:** reflective and inviting. The viewer should feel "less tricked", never tested or graded.
 - **Transitions:** short visual transitions on screen, no sound effects. The reveal should feel exciting as it builds up (2026-10-06).
+- **End-of-clip effects** (2026-10-06, final review): near the end of each lens clip, a visual effect for that feeling comes in, with one counterweight — angry: squares pressing in, sparks and cracks, warm light in the cracks (anger can hold vulnerability); sad: blue and purple drops falling into small rings, one gold drop rising (hope in the heavy); happy: gold bubbles and colourful shapes bouncing and growing when they meet, one blue drop in the dance (joy does not mean everything is light). The viewer sees them before answering, as part of the framing. "No one is only what you see and feel."
 - **Brand:** this is a LENSVRA piece.
 
 ## Features and Behavior

@@ -107,6 +107,7 @@ LENSVRA BUILD WITH AI/
 ├── index.html          # what is on the page: all five screens
 ├── style.css           # how it looks: cinema dark, purple, white, grey
 ├── script.js           # what happens: texts and settings at the top, then the journey
+├── effects.js          # the visual effects at the end of each lens clip
 ├── media/
 │   ├── clip-angry.mp4  # Cartoon Rage Face, with music
 │   ├── clip-sad.mp4    # Tearful Gaze, with music

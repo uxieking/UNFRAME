@@ -46,6 +46,8 @@ Build mode: fast (chosen 2026-10-06; learner may switch to learn mode later)
 
 ## Final Review
 
+- [x] End-of-clip effects for the three lens clips (angry: squares press in, sparks, cracks with warm light; sad: blue and purple drops with rings, one gold drop rising; happy: gold bubbles and shapes that bounce and grow, one blue drop dancing). They come in 2.5 s before each lens clip ends and stay while the question shows; the normal clip stays quiet. Verified in the browser; learner still to see it.
+- [ ] Second run: reversed effects when the viewer takes the test again (meaning being clarified with the learner).
 - [ ] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
@@ -64,3 +66,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Six answer choices instead of four (scared and surprised added) — the creator asked for them after slice 1 was built; scope, PRD and spec updated to match.
 - Short visual transitions added to slice 2 (fades between screens and clips; reveal builds up clip by clip, answers next, closing question last; no sound effects) — the learner's early check found the ending needed to feel more exciting.
 - The sound reminder sits over the first clip for about three seconds and fades out, instead of on the opening screen — the opening screen must stay name, text and button only (`spec.md > Look and Feel`). If the browser blocks a clip from playing, its own play button is shown so the journey can continue.
+- Added `effects.js` and visual effects at the end of each lens clip, seen by the viewer before answering — the creator chose this during the final review as an extra layer of framing, each feeling with a small counterweight. Spec file structure updated.

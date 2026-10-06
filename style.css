@@ -102,6 +102,15 @@ html, body {
   display: block;
 }
 
+/* The effects layer sits exactly over the clip and never blocks a tap */
+.effects-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 /* Small notes laid over the clip: the sound reminder and the error message */
 .player-note {
   position: absolute;
