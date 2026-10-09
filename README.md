@@ -34,3 +34,8 @@ To change any wording, edit the texts block at the top of `script.js`.
 Lenses (Cartoon Rage Face, Tearful Gaze, Mega Joy Face), music, lyrics, dance and footage by LENSVRA. The song is "Only Human".
 
 Built with plain HTML, CSS and JavaScript during the Devpost *Build With AI: Basics* hackathon.
+
+## License
+
+- **Code** (`index.html`, `style.css`, `script.js`, `effects.js`): MIT License. See [`LICENSE`](LICENSE).
+- **Music, lenses, video clips, footage, choreography and graphics**: © LENSVRA, all rights reserved. You may view and try UNFRAME; any reuse needs permission. See [`MEDIA-LICENSE.md`](MEDIA-LICENSE.md).
