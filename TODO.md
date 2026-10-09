@@ -7,7 +7,7 @@ Legend: ☑ done · ▶ working on now · ☐ not started
 
 ## Now
 
-- ▶ Write and submit the Devpost entry. *(skill: `6-ship`. Video: https://www.youtube.com/shorts/XHwd8V_RjG4 · Code: https://github.com/uxieking/UNFRAME)*
+- 🎉 UNFRAME is submitted on Devpost (2026-10-09). *(Video: https://www.youtube.com/shorts/XHwd8V_RjG4 · Code: https://github.com/uxieking/UNFRAME)*
 
 ## Next
 
@@ -27,6 +27,6 @@ Legend: ☑ done · ▶ working on now · ☐ not started
 - ☑ Test the complete user journey and improve it. *(tested by the creator and two other people; their feedback built in)*
 - ☐ Register for and attend the live sessions listed on the hackathon page.
 - ☑ Prepare the demo video and public GitHub repository. *(both done 2026-10-09)*
-- ▶ Write and submit the hackathon entry.
+- ☑ Write and submit the hackathon entry. *(submitted 2026-10-09 with video and GitHub links)*
 
 *Last updated: 2026-10-09*
