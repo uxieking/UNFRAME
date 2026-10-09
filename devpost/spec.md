@@ -49,6 +49,7 @@ Not verified online while writing this; to check early in the build:
 - **To start it:** open the project folder and double-click `index.html`.
 - **For the demo recording:** open `index.html` in Chrome on the computer, make the window tall and narrow like a phone, and record the screen while going through the whole journey. Recording with sound is needed, since the music is part of the framing.
 - **Submission needs both** a short demo video and a public GitHub repository. The creator will upload the demo video to YouTube, with comments turned off, and has a GitHub account.
+- **Demo video:** https://www.youtube.com/shorts/XHwd8V_RjG4 ("Demo UNFRAME Build with AI", publicly viewable, checked 2026-10-09).
 - **Putting it online is optional** and not part of this build. If wanted later, GitHub Pages can publish this same folder as a link without changes. Docs: https://docs.github.com/en/pages
 
 ## Look and Feel

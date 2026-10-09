@@ -7,7 +7,7 @@ Legend: ☑ done · ▶ working on now · ☐ not started
 
 ## Now
 
-- ▶ Prepare the demo video and public GitHub repository, then write the submission. *(skill: `6-ship`)*
+- ▶ Make the public GitHub repository, then write the submission. *(skill: `6-ship`; demo video made and posted on YouTube 2026-10-09)*
 
 ## Next
 
@@ -26,7 +26,7 @@ Legend: ☑ done · ▶ working on now · ☐ not started
 - ☑ Build in small, testable steps. *(done 2026-10-06: three steps plus six answers, transitions, end-of-clip effects, reversed effects on the second run; app map in `devpost/app-map.html`)*
 - ☑ Test the complete user journey and improve it. *(tested by the creator and two other people; their feedback built in)*
 - ☐ Register for and attend the live sessions listed on the hackathon page.
-- ▶ Prepare the demo video and public GitHub repository.
+- ▶ Prepare the demo video and public GitHub repository. *(demo video ☑ posted on YouTube 2026-10-09; GitHub repository still to do)*
 - ☐ Write and submit the hackathon entry.
 
-*Last updated: 2026-10-06*
+*Last updated: 2026-10-09*
